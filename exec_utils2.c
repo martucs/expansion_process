@@ -6,7 +6,7 @@
 /*   By: martalop <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:30:32 by martalop          #+#    #+#             */
-/*   Updated: 2024/10/10 14:10:03 by martalop         ###   ########.fr       */
+/*   Updated: 2024/10/10 23:00:01 by martalop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int	mult_child(t_cmd *cmd, t_info *info, t_exec *exec_info)
 {
 	expand_files(cmd->redirs, info->envp, info->prev_ex_stat);
-	if (open_redir(cmd) == 1) /// voy a tener que enviarme el envp
+	if (open_redir(cmd) == 1) 
 	{
 		free_child(info, cmd, exec_info);
 		exit(1);
@@ -38,7 +38,7 @@ int	mult_child(t_cmd *cmd, t_info *info, t_exec *exec_info)
 		return (exec_builtin(cmd->arr_cmd, info, cmd, exec_info));
 	if (execve(cmd->path, cmd->arr_cmd, exec_info->env) == -1)
 	{
-		cmd_not_found(cmd->path);
+		cmd_not_found(cmd->arr_cmd[0]);
 		free_child(info, cmd, exec_info);
 		exit(127);
 	}
@@ -66,7 +66,7 @@ void	simp_child_cmd(t_cmd *cmd, t_info *info, t_exec *exec_info)
 	}
 	if (execve(cmd->path, cmd->arr_cmd, exec_info->env) == -1)
 	{
-		cmd_not_found(cmd->path);
+		cmd_not_found(cmd->arr_cmd[0]);
 		free_child(info, cmd, exec_info);
 		exit(127);
 	}

@@ -6,7 +6,7 @@
 /*   By: martalop <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 14:01:40 by martalop          #+#    #+#             */
-/*   Updated: 2024/10/10 14:14:08 by martalop         ###   ########.fr       */
+/*   Updated: 2024/10/10 23:04:08 by martalop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,8 @@ char	**my_special_split(char *s)
 	char	**tmp_arr;
 
 	i = 0;
-	str = " hola \"maj sh  gq \"kjhbla kjh ";
+	str = " hola \"maj sh'  gq \"kjhbla kjh ";
+	printf("input: _%s_\n", str);
 	arr = my_special_split(str);
 	while (arr && arr[i])
 	{
@@ -190,7 +191,7 @@ char	**my_special_split(char *s)
 		}
 		i++;
 	}
-	printf("\nfinal array\n");
+	printf("final array\n");
 	print_char_arr(arr);
 	free_array(arr);
 	return (0);
@@ -446,7 +447,7 @@ char	**join_all(char **arr)
 			free(final_arr[i]);
 			final_arr[i] = join_back_expanded(tmp_arr);
 			free_array(tmp_arr);
-//			printf("final_arr[%d] with removed quotes: %s\n\n", i, final_arr[i]);
+	//		printf("final_arr[%d] with removed quotes: %s\n\n", i, final_arr[i]);
 		}
 		i++;
 	}

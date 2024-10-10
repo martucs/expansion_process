@@ -6,7 +6,7 @@
 /*   By: martalop <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 19:14:49 by martalop          #+#    #+#             */
-/*   Updated: 2024/10/10 15:27:22 by martalop         ###   ########.fr       */
+/*   Updated: 2024/10/10 23:28:33 by martalop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,14 @@ int	exec_builtin(char **arr_cmd, t_info *info, t_cmd *cmd, t_exec *exec_info)
 	return (0);
 }
 
+char    **test_cmd_expansion(char **arr_cmd, t_envp *envp, int prev_ex_stat);
+
 int	prep_cmds(t_cmd *cmd, t_info *info, t_exec *exec_info)
 {
-	expand_cmds(cmd, info->envp, info->prev_ex_stat);
+	(void)info;
+	//expand_cmds(cmd, info->envp, info->prev_ex_stat);
 	// si !arr_cmd, return (0) pero NO quiero continuar con ejecucion O continuar pero preparlo todo para que no de segfault
+	cmd->arr_cmd = test_cmd_expansion(cmd->arr_cmd, info->envp, info->prev_ex_stat);
 	cmd->path = find_path(exec_info->paths, cmd->arr_cmd);
 	if (!cmd->path)
 		return (1);

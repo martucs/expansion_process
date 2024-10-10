@@ -6,7 +6,7 @@
 /*   By: martalop <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 12:58:48 by martalop          #+#    #+#             */
-/*   Updated: 2024/10/10 15:52:09 by martalop         ###   ########.fr       */
+/*   Updated: 2024/10/10 23:28:57 by martalop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,13 +162,12 @@ int	expand_files(t_redir *redirs, t_envp *envp, int prev_ex_stat)
 	char	**aux;
 	int		i;
 
-
 	i = 0;
 	tmp_red = redirs;
 	while (tmp_red)
 	{
-		tmp_red->file_name = ft_strdup("\"$test'\"hol\"$bla\"");
-		printf("\ntmp_red->file_name: %s\n", tmp_red->file_name);
+	//	tmp_red->file_name = ft_strdup("\"$test'\"hol\"$bla\"");
+//		printf("\ntmp_red->file_name: %s\n", tmp_red->file_name);
 		aux = NULL;
 		aux = full_expansion(tmp_red->file_name, envp, prev_ex_stat);
 		if (!aux)
@@ -176,25 +175,56 @@ int	expand_files(t_redir *redirs, t_envp *envp, int prev_ex_stat)
 			printf("expansion returns NULL\n");
 			return (1);
 		}
-		while (aux && aux[i])
-		{
-			printf("FULL EXPANSION RES: arr[%d]: %s\n", i, aux[i]);
-			i++;
-		}
-		if (!aux[i])
-			printf("FULL EXPANSION RES: arr[%d]: %p\n", i, aux[i]);
-		printf("\n");
+//		i = 0;
+//		while (aux && aux[i])
+//		{
+//			printf("FULL EXPANSION RES: arr[%d]: %s\n", i, aux[i]);
+//			i++;
+//		}
+//		if (!aux[i])
+//			printf("FULL EXPANSION RES: arr[%d]: %p\n", i, aux[i]);
+//		printf("\n");
 		handle_expanded_redir(aux, tmp_red); 
 		tmp_red = tmp_red->next;
 	}
 	return (0);
 }
 
+char	**test_cmd_expansion(char **arr_cmd, t_envp *envp, int prev_ex_stat)
+{
+	int		i;
+	int		x;
+	char	**aux;
+	char	**new_cmd;
+
+	x = 0;
+	aux = NULL;
+	new_cmd = NULL;
+	while (arr_cmd && arr_cmd[x])
+	{
+		i = 0;
+		//	tmp_cmd->arr_cmd[x] = ft_strdup("test='ls -l'");
+		//	printf("arr_cmd[%d] before expansion: %s\n", x, tmp_cmd->arr_cmd[x]);
+		aux = full_expansion(arr_cmd[x], envp, prev_ex_stat);
+		//		printf("Expandin dis nuts: %s:\n", tmp_cmd->arr_cmd[x]);
+		//		print_char_arr(aux);
+		while (aux && aux[i])
+		{
+			new_cmd = add_to_array(aux[i], new_cmd);
+			i++;
+		}
+		free_array(aux);
+		x++;
+	}
+	free_array(arr_cmd);
+	return (new_cmd);
+}
+
 int	expand_cmds(t_cmd *cmd, t_envp *envp, int prev_ex_stat)
 {
 	t_cmd	*tmp_cmd;
 	char	**aux;
-	char	**aux2;
+	char	**new_cmd;
 	int		i;
 	int		x;
 
@@ -203,25 +233,34 @@ int	expand_cmds(t_cmd *cmd, t_envp *envp, int prev_ex_stat)
 	while (tmp_cmd)
 	{
 		aux = NULL;
+		new_cmd = NULL;
 		while (tmp_cmd->arr_cmd && tmp_cmd->arr_cmd[x])
 		{
 			i = 0;
+		//	tmp_cmd->arr_cmd[x] = ft_strdup("test='ls -l'");
+		//	printf("arr_cmd[%d] before expansion: %s\n", x, tmp_cmd->arr_cmd[x]);
 			aux = full_expansion(tmp_cmd->arr_cmd[x], envp, prev_ex_stat);
-	//		aux2 = split_dup(aux);
-	//		good_arr = add_array(aux, aux2);
-			
+	//		printf("Expandin dis nuts: %s:\n", tmp_cmd->arr_cmd[x]);
+	//		print_char_arr(aux);
 			while (aux && aux[i])
 			{
-				printf("FULL EXPANSION RES: arr[%d]: %s\n", i, aux[i]);
+				new_cmd = add_to_array(aux[i], new_cmd);
 				i++;
-			}
-			if (!aux[i])
-				printf("FULL EXPANSION RES: arr[%d]: %p\n", i, aux[i]);
-			printf("\n");
-		//	free_array(tmp_cmd->arr_cmd);
-		//	tmp_cmd->arr_cmd = aux;
+		 	}
+			free_array(aux);
 			x++;
 		}
+		free_array(tmp_cmd->arr_cmd);
+		tmp_cmd->arr_cmd = new_cmd;
+/*		i = 0;
+		while (new_cmd && new_cmd[i])
+		{
+			printf("FULL EXPANSION RES: arr[%d]: %s\n", i, new_cmd[i]);
+			i++;
+		}
+		if (!aux[i])
+			printf("FULL EXPANSION RES: arr[%d]: %p\n", i, new_cmd[i]);
+		printf("\n");*/
 		tmp_cmd = tmp_cmd->next;
 	}
 	return (0);
