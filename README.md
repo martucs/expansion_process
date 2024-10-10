@@ -4,3 +4,5 @@ If it doesnt do this PLEASE LET ME KNOW
 
 another_special_split() returns char **. it splits by  "" && '' AND REMOVES THEM
 Example: for str = hola   "que  tal"'kajsh akjs "', it should return arr[0] = hola  (with the spaces), arr[1] = que tal, arr[2] = kajsh akjs ".
+
+checkout the my_special_split, cause it does something useful i just dont remember what
